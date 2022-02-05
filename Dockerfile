@@ -35,4 +35,4 @@ A:\FREEDOS\BIN\FDAPM POWEROFF' > /tmp/FDAUTO.BAT \
     && mcopy -i /media/x86BOOT.img /tmp/FDAUTO.BAT ::FDAUTO.BAT \
     && apk del mtools && rm /tmp/FDAUTO.BAT
 
-ENTRYPOINT qemu-system-i386 -nographic -blockdev driver=file,node-name=f0,filename=/media/x86BOOT.img -device floppy,drive=f0 -drive if=virtio,format=raw,file=fat:rw:$(pwd) -boot order=a
+ENTRYPOINT echo "Current working directory is $(pwd), contents:" && ls -lh $(pwd) && qemu-system-i386 -nographic -blockdev driver=file,node-name=f0,filename=/media/x86BOOT.img -device floppy,drive=f0 -drive if=virtio,format=raw,file=fat:rw:$(pwd) -boot order=a
