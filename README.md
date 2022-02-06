@@ -36,3 +36,17 @@ docker run --workdir /github/workspace -v "/path/to/cicd_dir":"/github/workspace
 
 If whatever commands you added to the `CICD_DOS.BAT` in the `/path/to/cicd_dir` write any files in the current
 directory, they should appear in that directory after the Docker instance completes its run and shuts down.
+
+Also, the default ENTRYPOINT configures several emulated sound devices, namely AC'97, Adlib/OPL2, SB16, and PC Speaker.
+Any sound output that was sent to these emulated devices will be directed to separate WAV files (one for each device),
+with names ending with `_out.wav` in `/path/to/cicd_dir` (or whichever directory you configured in its place). This
+separation is to make the asserting and verifying of sound output easier, for instance when you're testing support for a
+specific sound device.
+
+Granted, the above list of sound devices is somewhat arbitrary at the moment, and mostly suits my specific needs in some
+projects I'm working on. But these options are easy to modify, simply by changing the ENTRYPOINT in the Dockerfile, or
+by overriding the entrypoint on the command-line when running an instance of the Docker image.
+
+Upon completion of the Docker instance, the QEMU console output can be found in the files `qemu_stdout.log` and
+`qemu_stderr.log`, with the latter containing any error output. You can use those to perform additional checks or
+assertions on.
