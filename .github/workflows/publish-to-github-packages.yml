@@ -10,7 +10,10 @@ name: Create and publish a Docker image
 
 on:
   push:
-    branches: ['main'] # Changed this to 'main', was 'release' in the example yaml
+    #branches: [ 'release' ]
+    tags:
+      # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
+      - v[0-9]+.*
 
 env:
   REGISTRY: ghcr.io
