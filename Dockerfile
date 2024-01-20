@@ -30,7 +30,7 @@ RUN apk update \
     && unzip devload.zip BIN/DEVLOAD.COM \
     && rm devload.zip \
     && cd qemu-${QEMU_VERSION} \
-    && ./configure --target-list=i386-softmmu --without-default-features --enable-tcg --enable-tools --enable-vvfat --enable-qcow1 \
+    && ./configure --target-list=i386-softmmu --without-default-features --enable-kvm --enable-tcg --enable-tools --enable-vvfat --enable-qcow1 \
     && NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
     && make -j${NPROC} \
     && make install \
@@ -64,6 +64,10 @@ RUN apk update \
     && apk del mtools && rm -rf /Downloads && rm -rf /tmp/*
 
 ENTRYPOINT (qemu-system-i386 \
+-machine pc,accel=kvm:tcg,hpet=off \
+-smp cpus=1,cores=1 \
+-m 256M \
+-rtc base=localtime \
 -nographic \
 -blockdev driver=file,node-name=fd0,filename=/media/x86BOOT.img -device floppy,drive=fd0 \
 -drive if=virtio,format=raw,file=fat:rw:$(pwd) \

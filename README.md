@@ -31,7 +31,8 @@ the command to run the Docker instance should be the following:
 
 ```shell
 # You may have to prefix the following command with `sudo `, depending on your environment.
-docker run --workdir /github/workspace -v "/path/to/cicd_dir":"/github/workspace" volkertb/cicd-qemu-dos-docker:0.1
+# If the host cannot provide KVM to the Docker container, then leave out the argument `--device=/dev/kvm`.
+docker run --device=/dev/kvm --workdir /github/workspace -v "/path/to/cicd_dir":"/github/workspace" volkertb/cicd-qemu-dos-docker:0.1
 ```
 
 If whatever commands you added to the `CICD_DOS.BAT` in the `/path/to/cicd_dir` write any files in the current
