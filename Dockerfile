@@ -23,11 +23,11 @@ RUN apk update \
     && mv 144m/x86BOOT.img /media/ \
     && rmdir 144m \
     && wget -qO- https://github.com/Baron-von-Riedesel/HimemX/releases/download/v3.36/HimemX.zip | unzip - HimemX2.exe \
-    && wget -nv https://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/distributions/1.2/repos/drivers/uhdd.zip \
+    && wget -nv https://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/repositories/1.3/drivers/uhdd.zip \
     && echo "$UHDD_SHA256  uhdd.zip" | sha256sum -c - \
     && unzip uhdd.zip BIN/UHDD.SYS \
     && rm uhdd.zip \
-    && wget -nv https://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/distributions/1.2/repos/base/devload.zip \
+    && wget -nv https://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/repositories/1.3/base/devload.zip \
     && echo "$DEVLOAD_SHA256  devload.zip" | sha256sum -c - \
     && unzip devload.zip BIN/DEVLOAD.COM \
     && rm devload.zip \
