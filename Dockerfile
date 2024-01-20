@@ -2,7 +2,7 @@
 # With thanks to https://github.com/tristanls/qemu-alpine/blob/master/Dockerfile for multi-core parallel build trick
 # With thanks to https://unix.stackexchange.com/a/6431 for the trick how to separate stdout/stderr files with `tee`
 # NOTE: apparently, vvfat requires the qcow(1) driver as well. Otherwise on startup: "Failed to locate qcow driver"
-FROM alpine:3.16.0
+FROM alpine:3.19.0
 
 ARG QEMU_VERSION=7.0.0
 ARG UHDD_SHA256=3b1ce2441e17adcd6aa80065b4181e5485e4f93a0ba87391d004741e43deb9d3
