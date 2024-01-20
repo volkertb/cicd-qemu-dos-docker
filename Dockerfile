@@ -46,7 +46,7 @@ RUN apk update \
     && echo "C:" >> /tmp/FDAUTO.BAT \
     && echo "IF EXIST CICD_DOS.BAT ECHO CICD_DOS.BAT file found in mounted volume. Running it..." >> /tmp/FDAUTO.BAT \
     && echo "IF EXIST CICD_DOS.BAT CALL CICD_DOS.BAT" >> /tmp/FDAUTO.BAT \
-    && echo "IF NOT EXIST CICD_DOS.BAT ECHO Could not run CICD_DOS.BAT file, since it was not found in mounted volume." >> /tmp/FDAUTO.BAT \
+    && echo "IF NOT EXIST C:\CICD_DOS.BAT ECHO Could not run CICD_DOS.BAT file, since it was not found in mounted volume." >> /tmp/FDAUTO.BAT \
     && echo "A:\FREEDOS\BIN\FDAPM POWEROFF" >> /tmp/FDAUTO.BAT \
     && unix2dos /tmp/FDAUTO.BAT \
     && mdel -i /media/x86BOOT.img ::FDAUTO.BAT \
