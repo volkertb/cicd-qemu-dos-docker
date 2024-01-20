@@ -8,6 +8,8 @@ ARG QEMU_VERSION=8.2.0
 ARG UHDD_SHA256=3b1ce2441e17adcd6aa80065b4181e5485e4f93a0ba87391d004741e43deb9d3
 ARG DEVLOAD_SHA256=dcc085e01f26ab97ac5ae052d485d3e323703922c64da691b90c9b1505bcfd76
 
+COPY run_cicd_dos.sh /usr/local/bin/
+
 RUN apk update \
     && apk add --upgrade apk-tools \
     && apk upgrade \
@@ -61,19 +63,7 @@ RUN apk update \
     && unix2dos /tmp/FDCONFIG.SYS \
     && mdel -i /media/x86BOOT.img ::FDCONFIG.SYS \
     && mcopy -i /media/x86BOOT.img /tmp/FDCONFIG.SYS ::FDCONFIG.SYS \
-    && apk del mtools && rm -rf /Downloads && rm -rf /tmp/*
+    && apk del mtools && rm -rf /Downloads && rm -rf /tmp/* \
+    && chmod +x /usr/local/bin/run_cicd_dos.sh
 
-ENTRYPOINT (qemu-system-i386 \
--machine pc,accel=kvm:tcg,hpet=off \
--smp cpus=1,cores=1 \
--m 256M \
--rtc base=localtime \
--nographic \
--blockdev driver=file,node-name=fd0,filename=/media/x86BOOT.img -device floppy,drive=fd0 \
--drive if=virtio,format=raw,file=fat:rw:$(pwd) \
--boot order=a \
--audiodev wav,id=snd0,path=$(pwd)/ac97_out.wav -device AC97,audiodev=snd0 \
--audiodev wav,id=snd1,path=$(pwd)/adlib_out.wav -device adlib,audiodev=snd1 \
--audiodev wav,id=snd2,path=$(pwd)/sb16_out.wav -device sb16,audiodev=snd2 \
--audiodev wav,id=snd3,path=$(pwd)/pcspk_out.wav -machine pcspk-audiodev=snd3 \
-| tee $(pwd)/qemu_stdout.log) 3>&1 1>&2 2>&3 | tee $(pwd)/qemu_stderr.log
+ENTRYPOINT /usr/local/bin/run_cicd_dos.sh
