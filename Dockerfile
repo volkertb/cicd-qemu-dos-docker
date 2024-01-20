@@ -4,7 +4,7 @@
 # NOTE: apparently, vvfat requires the qcow(1) driver as well. Otherwise on startup: "Failed to locate qcow driver"
 FROM alpine:3.19.0
 
-ARG QEMU_VERSION=7.0.0
+ARG QEMU_VERSION=8.2.0
 ARG UHDD_SHA256=3b1ce2441e17adcd6aa80065b4181e5485e4f93a0ba87391d004741e43deb9d3
 ARG DEVLOAD_SHA256=dcc085e01f26ab97ac5ae052d485d3e323703922c64da691b90c9b1505bcfd76
 
