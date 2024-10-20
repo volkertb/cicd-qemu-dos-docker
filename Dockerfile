@@ -6,14 +6,18 @@
 FROM docker.io/alpine:3.20.3 AS build
 
 ARG QEMU_VERSION=8.2.0
+ARG QEMU_SHA256=bf00d2fa12010df8b0ade93371def58e632cb32a6bfdc5f5a0ff8e6a1fb1bf32
 ARG UHDD_SHA256=3b1ce2441e17adcd6aa80065b4181e5485e4f93a0ba87391d004741e43deb9d3
 ARG DEVLOAD_SHA256=dcc085e01f26ab97ac5ae052d485d3e323703922c64da691b90c9b1505bcfd76
+ARG HIMEMX_VERSION=3.36
+ARG HIMEMX_SHA256=ea857b58ccc99e9e8330803950605576cc04eea6908fa48621ddc04a95d200e4
+ARG FD13_FLOPPY_SHA256=75a4e11a7fce6f124e20927b3022b4b715a2a3f7324c5f5bfea42d90d80eb072
 
 RUN apk --no-cache add build-base python3 ninja pkgconfig glib-dev meson pixman-dev bash perl
 
 WORKDIR /Downloads
 
-ADD https://download.qemu.org/qemu-${QEMU_VERSION}.tar.xz /Downloads
+ADD --checksum=sha256:$QEMU_SHA256 https://download.qemu.org/qemu-${QEMU_VERSION}.tar.xz /Downloads
 RUN tar xJf /Downloads/qemu-${QEMU_VERSION}.tar.xz
 WORKDIR /Downloads/qemu-${QEMU_VERSION}
 RUN ./configure --target-list=i386-softmmu --without-default-features --enable-kvm --enable-tcg --enable-tools --enable-vvfat --enable-qcow1
@@ -25,11 +29,11 @@ RUN apk --no-cache add mtools
 
 WORKDIR /Downloads
 
-ADD https://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/distributions/1.3/official/FD13-FloppyEdition.zip /Downloads
+ADD --checksum=sha256:$FD13_FLOPPY_SHA256 https://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/distributions/1.3/official/FD13-FloppyEdition.zip /Downloads
 RUN unzip /Downloads/FD13-FloppyEdition.zip 144m/x86BOOT.img
 RUN mv 144m/x86BOOT.img /media/
 
-ADD https://github.com/Baron-von-Riedesel/HimemX/releases/download/v3.36/HimemX.zip /Downloads
+ADD --checksum=sha256:$HIMEMX_SHA256 https://github.com/Baron-von-Riedesel/HimemX/releases/download/v$HIMEMX_VERSION/HimemX.zip /Downloads
 RUN unzip /Downloads/HimemX.zip HimemX2.exe
 
 ADD --checksum=sha256:$UHDD_SHA256 https://www.ibiblio.org/pub/micro/pc-stuff/freedos/files/repositories/1.3/drivers/uhdd.zip /Downloads
@@ -64,7 +68,7 @@ RUN mcopy -i /media/x86BOOT.img /tmp/FDCONFIG.SYS ::FDCONFIG.SYS
 FROM docker.io/alpine:3.20.3 AS image
 COPY --from=build /media /media
 COPY --from=build /usr/local /usr/local
-RUN apk --no-cache add glib
+RUN apk --no-cache add glib  # Not sure if pixman and libgcc are needed too, but `qemu-system-i386 --version` runs fine without them.
 RUN qemu-system-i386 --version
 COPY run_cicd_dos.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/run_cicd_dos.sh
