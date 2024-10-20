@@ -5,15 +5,15 @@
 # NOTE: apparently, vvfat requires the qcow(1) driver as well. Otherwise on startup: "Failed to locate qcow driver"
 FROM docker.io/alpine:3.20.3 AS build
 
-ARG QEMU_VERSION=8.2.0
-ARG QEMU_SHA256=bf00d2fa12010df8b0ade93371def58e632cb32a6bfdc5f5a0ff8e6a1fb1bf32
+ARG QEMU_VERSION=9.1.0
+ARG QEMU_SHA256=816b7022a8ba7c2ac30e2e0cf973e826f6bcc8505339603212c5ede8e94d7834
 ARG UHDD_SHA256=3b1ce2441e17adcd6aa80065b4181e5485e4f93a0ba87391d004741e43deb9d3
 ARG DEVLOAD_SHA256=dcc085e01f26ab97ac5ae052d485d3e323703922c64da691b90c9b1505bcfd76
 ARG HIMEMX_VERSION=3.36
 ARG HIMEMX_SHA256=ea857b58ccc99e9e8330803950605576cc04eea6908fa48621ddc04a95d200e4
 ARG FD13_FLOPPY_SHA256=75a4e11a7fce6f124e20927b3022b4b715a2a3f7324c5f5bfea42d90d80eb072
 
-RUN apk --no-cache add build-base python3 ninja pkgconfig glib-dev meson pixman-dev bash perl
+RUN apk --no-cache add build-base python3 ninja pkgconfig glib-dev meson pixman-dev bash perl git
 
 WORKDIR /Downloads
 
