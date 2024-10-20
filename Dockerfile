@@ -3,7 +3,7 @@
 # With thanks to https://github.com/tristanls/qemu-alpine/blob/master/Dockerfile for multi-core parallel build trick
 # With thanks to https://unix.stackexchange.com/a/6431 for the trick how to separate stdout/stderr files with `tee`
 # NOTE: apparently, vvfat requires the qcow(1) driver as well. Otherwise on startup: "Failed to locate qcow driver"
-FROM docker.io/alpine:3.19.0 AS build
+FROM docker.io/alpine:3.20.3 AS build
 
 ARG QEMU_VERSION=8.2.0
 ARG UHDD_SHA256=3b1ce2441e17adcd6aa80065b4181e5485e4f93a0ba87391d004741e43deb9d3
@@ -61,7 +61,7 @@ RUN unix2dos /tmp/FDCONFIG.SYS
 RUN mdel -i /media/x86BOOT.img ::FDCONFIG.SYS
 RUN mcopy -i /media/x86BOOT.img /tmp/FDCONFIG.SYS ::FDCONFIG.SYS
 
-FROM docker.io/alpine:3.19.0 AS image
+FROM docker.io/alpine:3.20.3 AS image
 COPY --from=build /media /media
 COPY --from=build /usr/local /usr/local
 RUN apk --no-cache add glib
